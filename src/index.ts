@@ -3,8 +3,8 @@ import { OrgData } from 'uniorg';
 import toVFile from 'to-vfile';
 
 import { Note, collectNote, NodeMiddleware, isOrgFile, createLinkMiddleware } from './parser/index.js';
-import { readdirSync, Dirent, existsSync } from 'fs';
-import { join, resolve } from 'path';
+import { readdirSync, Dirent, existsSync, writeFileSync } from 'fs';
+import { resolve } from 'path';
 import { stringify } from 'uniorg-stringify/lib/stringify.js';
 
 const readOrgFileContent = (filePath: string): OrgData => {
@@ -19,7 +19,10 @@ const collectNoteFromFile = (filePath: string, middlewareChains?: NodeMiddleware
     return null;
   }
   const orgContent = readOrgFileContent(filePath);
-  const note = collectNote(orgContent, middlewareChains);
+  const [note, updatedOrgData] = collectNote(orgContent, middlewareChains);
+  // TODO: rewrite this code as external callback function or flag for safety parsing
+  // add optional possibility for disabling file override functional
+  writeFileSync(filePath, stringify(updatedOrgData));
   return note;
 };
 
@@ -81,4 +84,7 @@ export { collectNoteFromFile, collectNotesFromDir, stringify, collectOrgNotesFro
 
 // TODO: master This logic should be moved to external npm package
 // const notes = collectNotesFromDir(join(resolve(), 'miscellaneous'));
-// console.log(notes);
+// const n = collectNoteFromFile(join(resolve(), 'miscellaneous', 'test2.org'), [
+//   createLinkMiddleware(join(resolve(), 'miscellaneous')),
+// ]);
+// console.log(n);

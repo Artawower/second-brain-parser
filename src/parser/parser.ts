@@ -1,3 +1,4 @@
+import { writeFileSync } from 'fs';
 import {
   Headline,
   Link,
@@ -134,7 +135,7 @@ const buildMiddleware =
   (orgNode: OrgNode) =>
     middlewareChains.reduce((orgNode, currentChain) => currentChain(orgNode), orgNode);
 
-export const collectNote = (content: OrgData, middlewareChains: NodeMiddleware[] = []): Note => {
+export const collectNote = (content: OrgData, middlewareChains: NodeMiddleware[] = []): [Note, OrgData] => {
   const middleware = buildMiddleware(middlewareChains);
 
   const handleOrgNode = createNodeHandlers(middleware);
@@ -164,5 +165,5 @@ export const collectNote = (content: OrgData, middlewareChains: NodeMiddleware[]
     }, newEmptyNote()) as Note;
 
   note.content = patchedOrgNode as OrgData;
-  return note;
+  return [note, patchedOrgNode as OrgData];
 };

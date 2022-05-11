@@ -9,4 +9,4 @@
 ***** 6 level
 
 
-[[./test.jpeg]]
+[[./test.jpg]]
