@@ -1,4 +1,3 @@
-import { writeFileSync } from 'fs';
 import {
   Headline,
   Link,
@@ -112,6 +111,8 @@ const createNodeHandlers =
       paragraph: createSelectionHandler(middleware),
       'property-drawer': createSelectionHandler(middleware),
       'node-property': asArray<NoteNodeChunk>(propertyHandler),
+      'list-item': createSelectionHandler(middleware),
+      'plain-list': createSelectionHandler(middleware),
     };
     const handler = handlers[node.type];
     const updatedNode = middleware?.(node) || node;

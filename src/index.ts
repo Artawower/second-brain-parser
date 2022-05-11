@@ -4,7 +4,7 @@ import toVFile from 'to-vfile';
 
 import { Note, collectNote, NodeMiddleware, isOrgFile, createLinkMiddleware } from './parser/index.js';
 import { readdirSync, Dirent, existsSync, writeFileSync } from 'fs';
-import { resolve } from 'path';
+import { join, resolve } from 'path';
 import { stringify } from 'uniorg-stringify/lib/stringify.js';
 
 const readOrgFileContent = (filePath: string): OrgData => {
@@ -87,4 +87,17 @@ export { collectNoteFromFile, collectNotesFromDir, stringify, collectOrgNotesFro
 // const n = collectNoteFromFile(join(resolve(), 'miscellaneous', 'test2.org'), [
 //   createLinkMiddleware(join(resolve(), 'miscellaneous')),
 // ]);
-// console.log(n);
+// debugPrettyPrint(
+//   readOrgFileContent('/Volumes/DARK SIDE/Yandex.Disk.localized/Dropbox/org-roam/it/typescript/custom-linter-rules.org')
+// );
+
+// const n = collectNoteFromFile(
+//   '/Volumes/DARK SIDE/Yandex.Disk.localized/Dropbox/org-roam/it/typescript/custom-linter-rules.org',
+//   [
+//     createLinkMiddleware(
+//       '/Volumes/DARK SIDE/Yandex.Disk.localized/Dropbox/org-roam/it/typescript/custom-linter-rules.org'
+//     ),
+//   ]
+// );
+
+// console.log(n.meta.images);
