@@ -1,0 +1,57 @@
+:PROPERTIES:
+:ID: identifier qweqwe
+:PUBLISHED: true
+:CATEGORY: article
+:END:
+
+#+TITLE: Test article
+#+DESCRIPTION: This is description!
+#+FILETAGS: :tag1:tag2:tag3:
+#+STARTUP: show2levels
+#+ACTIVE:
+
+
+* Headline 1
+
+Some text
+** Headline 2
+ [[https://google.com][Its a link]]
+Another one text
+
+[[/Volumes/DARK SIDE/pics/screenshots/1.webp]]
+
+[[/Volumes/DARK SIDE/pics/screenshots/branch.jpg]]
+
+
+ [[https://du-blog.ru][another link]]
+*Bold text* - its a bold
+
+[[id:elisp][Elisp]]
++ list1
++ list2
+
+
+- List 3
+- list 4
+
+
+#+BEGIN_QUOTE
+Quote about life
+and so on
+#+END_QUOTE
+
+| hello | amma | boy |
+|   123 |  123 | qwe |
+
+
+
+#+BEGIN_CENTER
+Everything should be made as simple as possible, \\
+but not any simpler
+#+END_CENTER
+
+
+[[./test.jpeg]]
+#+BEGIN_SRC typescript
+console.log('Hello world')
+#+END_SRC
