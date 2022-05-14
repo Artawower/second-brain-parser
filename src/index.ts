@@ -1,11 +1,17 @@
-import { parse } from 'uniorg-parse/lib/parser.js';
-import { OrgData } from 'uniorg';
-import toVFile from 'to-vfile';
+import { parse } from "uniorg-parse/lib/parser.js";
+import { OrgData } from "uniorg";
+import toVFile from "to-vfile";
 
-import { Note, collectNote, NodeMiddleware, isOrgFile, createLinkMiddleware } from './parser/index.js';
-import { readdirSync, Dirent, existsSync, writeFileSync } from 'fs';
-import { join, resolve } from 'path';
-import { stringify } from 'uniorg-stringify/lib/stringify.js';
+import {
+  Note,
+  collectNote,
+  NodeMiddleware,
+  isOrgFile,
+  createLinkMiddleware,
+} from "./parser/index.js";
+import { readdirSync, Dirent, existsSync, writeFileSync } from "fs";
+import { join, resolve } from "path";
+import { stringify } from "uniorg-stringify/lib/stringify.js";
 
 const readOrgFileContent = (filePath: string): OrgData => {
   const orgFile = toVFile.readSync(filePath);
@@ -13,7 +19,10 @@ const readOrgFileContent = (filePath: string): OrgData => {
   return parse(orgFile);
 };
 
-const collectNoteFromFile = (filePath: string, middlewareChains?: NodeMiddleware[]): Note => {
+const collectNoteFromFile = (
+  filePath: string,
+  middlewareChains?: NodeMiddleware[]
+): Note => {
   const isFileExist = existsSync(filePath);
   if (!isFileExist) {
     return null;
@@ -30,7 +39,7 @@ const collectNoteFromFile = (filePath: string, middlewareChains?: NodeMiddleware
  * Internal function for pretty printing the org content as nested tree
  */
 const debugPrettyPrint = (o: { children: any[] }, level: number = 0) => {
-  console.log(' '.repeat(level), o);
+  console.log(" ".repeat(level), o);
   if (!o.children) {
     return;
   }
@@ -67,7 +76,13 @@ const collectOrgNotesFromDir = (dir: string): Note[] => {
   return notes.filter((n) => n.id);
 };
 
-export { collectNoteFromFile, collectNotesFromDir, stringify, collectOrgNotesFromDir, createLinkMiddleware };
+export {
+  collectNoteFromFile,
+  collectNotesFromDir,
+  stringify,
+  collectOrgNotesFromDir,
+  createLinkMiddleware,
+};
 
 // const note = collectNoteFromFile('./miscellaneous/test1.org');
 
@@ -91,13 +106,13 @@ export { collectNoteFromFile, collectNotesFromDir, stringify, collectOrgNotesFro
 //   readOrgFileContent('/Volumes/DARK SIDE/Yandex.Disk.localized/Dropbox/org-roam/it/typescript/custom-linter-rules.org')
 // );
 
-// const n = collectNoteFromFile(
-//   '/Volumes/DARK SIDE/Yandex.Disk.localized/Dropbox/org-roam/it/typescript/custom-linter-rules.org',
-//   [
-//     createLinkMiddleware(
-//       '/Volumes/DARK SIDE/Yandex.Disk.localized/Dropbox/org-roam/it/typescript/custom-linter-rules.org'
-//     ),
-//   ]
-// );
+const n = collectNoteFromFile(
+  "/Volumes/DARK SIDE/Yandex.Disk.localized/Dropbox/org-roam/it/typescript/custom-linter-rules.org",
+  [
+    createLinkMiddleware(
+      "/Volumes/DARK SIDE/Yandex.Disk.localized/Dropbox/org-roam/it/typescript/custom-linter-rules.org"
+    ),
+  ]
+);
 
 // console.log(n.meta.images);
