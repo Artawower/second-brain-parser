@@ -25,6 +25,7 @@ const collectNoteFromFile = (
 ): Note => {
   const isFileExist = existsSync(filePath);
   if (!isFileExist) {
+    console.warn(`${filePath} does not exist`);
     return null;
   }
   const orgContent = readOrgFileContent(filePath);
@@ -107,12 +108,12 @@ export {
 // );
 
 const n = collectNoteFromFile(
-  "/Volumes/DARK SIDE/Yandex.Disk.localized/Dropbox/org-roam/it/typescript/custom-linter-rules.org",
+  "/Users/darkawower/Yandex.Disk.localized/Dropbox/org-roam/non_it/headline-test2.org",
   [
     createLinkMiddleware(
-      "/Volumes/DARK SIDE/Yandex.Disk.localized/Dropbox/org-roam/it/typescript/custom-linter-rules.org"
+      "/Users/darkawower/Yandex.Disk.localized/Dropbox/org-roam/non_it"
     ),
   ]
 );
 
-// console.log(n.meta.images);
+console.log(JSON.stringify(n, null, 2));

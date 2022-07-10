@@ -1,21 +1,30 @@
-import { Link, OrgNode } from 'uniorg';
-import { isFileImage, isFileNameContainUuid, uniquifyFileName } from './tools.js';
-import { existsSync, renameSync } from 'fs';
-import { join } from 'path';
+import { Link, OrgNode } from "uniorg";
+import {
+  isFileImage,
+  isFileNameContainUuid,
+  uniquifyFileName,
+} from "./tools.js";
+import { existsSync, renameSync } from "fs";
+import { join } from "path";
 
 // TODO: master rename this builder if need a real builder
 export const createLinkMiddleware =
   (dirPath: string) =>
   (orgData: Link): OrgNode => {
-    const isNotLink = orgData.type !== 'link';
-    const isNotFile = orgData.linkType !== 'file';
+    const isNotLink = orgData.type !== "link";
+    const isNotFile = orgData.linkType !== "file";
+    if (isNotLink || isNotFile) {
+      return;
+    }
+
     if (
-      isNotLink ||
-      isNotFile ||
       !isFileImage(orgData.path) ||
       isFileNameContainUuid(orgData.path) ||
       !existsSync(join(dirPath, orgData.path))
     ) {
+      console.info("DIR PATH: ", join(dirPath, orgData.path));
+      console.info("FILE EXIST: ", existsSync(join(dirPath, orgData.path)));
+      console.info("ORG DATA: ", orgData);
       return orgData;
     }
 
@@ -25,7 +34,7 @@ export const createLinkMiddleware =
       orgData.path = newFileName;
       orgData.rawLink = newFileName;
     } catch (e) {
-      if (e.code !== 'ENOENT') {
+      if (e.code !== "ENOENT") {
         throw e;
       }
     }
