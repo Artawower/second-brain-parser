@@ -28,6 +28,7 @@ interface NoteNodeChunk {
   published?: boolean;
   externalLinks?: NoteLink[];
   internalLinks?: NoteLink[];
+  previewImg?: string;
   images?: string[];
   id?: string;
 }
@@ -73,12 +74,12 @@ const keywordHandlers: { [key: string]: (data: Keyword) => NoteNodeChunk } = {
     tags: content.value.split(FILETAGS_DEVIDER).filter((v: string) => v),
   }),
   description: (content: Keyword) => ({ description: content.value }),
+  preview_img: (content: Keyword) => ({ previewImg: content.value }),
 };
 
-const keywordHandler = (content: Keyword): [NoteNodeChunk, OrgNode] => [
-  keywordHandlers[content.key.toLocaleLowerCase()]?.(content),
-  content,
-];
+const keywordHandler = (content: Keyword): [NoteNodeChunk, OrgNode] => {
+  return [keywordHandlers[content.key.toLocaleLowerCase()]?.(content), content];
+};
 
 const combineRawTextFromChildren = (children: Text[]) =>
   children.reduce(
@@ -155,6 +156,7 @@ const createNodeHandlers =
       "plain-list": createSelectionHandler(middleware),
     };
     const handler = handlers[node.type];
+
     const updatedNode = middleware?.(node) || node;
     return handler ? handler(updatedNode) : [[], updatedNode];
   };
@@ -172,12 +174,9 @@ const newEmptyNote = (): Partial<Note> => {
 };
 
 const buildMiddleware =
-  (middlewareChains: NodeMiddleware[] = []) =>
+  (middlewareChains: NodeMiddleware[] = []): NodeMiddleware =>
   (orgNode: OrgNode) =>
-    middlewareChains.reduce(
-      (orgNode, currentChain) => currentChain(orgNode),
-      orgNode
-    );
+    middlewareChains.reduce((node, fn) => fn(node), orgNode);
 
 export const collectNote = (
   content: OrgData,
@@ -202,6 +201,7 @@ export const collectNote = (
       acc.meta.category ??= cn.category;
       acc.meta.description ??= cn.description;
       acc.meta.published ??= cn.published;
+      acc.meta.previewImg ??= cn.previewImg;
       acc.meta.tags = [...acc.meta.tags, ...tags];
       acc.meta.externalLinks = [...acc.meta.externalLinks, ...externalLinks];
       acc.meta.linkedArticles = [...acc.meta.linkedArticles, ...internalLinks];

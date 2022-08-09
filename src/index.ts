@@ -8,15 +8,16 @@ import {
   NodeMiddleware,
   isOrgFile,
   createLinkMiddleware,
+  createPreviewImageMiddleware,
 } from "./parser/index.js";
 import { readdirSync, Dirent, existsSync, writeFileSync } from "fs";
-import { join, resolve } from "path";
+import { resolve } from "path";
 import { stringify } from "uniorg-stringify/lib/stringify.js";
 
 const readOrgFileContent = (filePath: string): OrgData => {
   const orgFile = toVFile.readSync(filePath);
   // TODO: handle "no such file or directory error"
-  return parse(orgFile);
+  return parse(orgFile as any);
 };
 
 const collectNoteFromFile = (
@@ -52,7 +53,10 @@ const collectNotesFromDir = (dir: string): Note[] => {
   const notes = files.reduce((notes: Note[], dirent: Dirent) => {
     const isDir = dirent.isDirectory();
     const fileName = resolve(dir, dirent.name);
-    const middlewares = [createLinkMiddleware(dir)];
+    const middlewares = [
+      createLinkMiddleware(dir),
+      createPreviewImageMiddleware(dir),
+    ];
 
     if (!isOrgFile(fileName)) {
       return notes;
@@ -83,6 +87,7 @@ export {
   stringify,
   collectOrgNotesFromDir,
   createLinkMiddleware,
+  createPreviewImageMiddleware,
 };
 
 // const note = collectNoteFromFile('./miscellaneous/test1.org');
@@ -108,12 +113,23 @@ export {
 // );
 
 const n = collectNoteFromFile(
-  "/Users/darkawower/Yandex.Disk.localized/Dropbox/org-roam/non_it/headline-test2.org",
+  "/Users/darkawower/Yandex.Disk.localized/Dropbox/org-roam/pet/second-brain-plan.org",
   [
     createLinkMiddleware(
-      "/Users/darkawower/Yandex.Disk.localized/Dropbox/org-roam/non_it"
+      "/Users/darkawower/Yandex.Disk.localized/Dropbox/org-roam/pet"
+    ),
+    createPreviewImageMiddleware(
+      "/Users/darkawower/Yandex.Disk.localized/Dropbox/org-roam/pet"
     ),
   ]
 );
 
-console.log(JSON.stringify(n, null, 2));
+// console.log(JSON.stringify(n, null, 2));
+
+// console.log(
+//   debugPrettyPrint(
+//     parse(`
+// - [ ] checkbox 1
+// - [ ]   checkbox 2`)
+//   )
+// );

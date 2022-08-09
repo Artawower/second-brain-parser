@@ -1,5 +1,5 @@
 import { Link, OrgNode, Paragraph } from "uniorg";
-import { parse } from "uniorg-parse/lib/parser.js";
+import { parse } from "uniorg-parse/lib/parser";
 
 import { collectNote } from "./index";
 
@@ -380,5 +380,32 @@ Another one text
     const link = (note.content.children[1] as Paragraph).children[0] as Link;
     expect(link.path).toEqual("./new-path.jpg");
     expect(link.rawLink).toEqual("./new-path.jpg");
+  });
+
+  it("Should collect preview img", () => {
+    const [note, _] = collectNote(
+      parse(`
+  #+TITLE: Some note with previmew image
+  #+PREVIEW_IMG: ./test.jpeg
+
+  * Some title
+  ** Some text
+  `)
+    );
+
+    expect(note.meta.previewImg).toEqual("./test.jpeg");
+  });
+
+  it("Should note collect preview img", () => {
+    const [note, _] = collectNote(
+      parse(`
+  #+TITLE: Some note with previmew image
+
+  * Some title
+  ** Some text
+  `)
+    );
+
+    expect(note.meta.previewImg).toBeUndefined();
   });
 });

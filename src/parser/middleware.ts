@@ -1,4 +1,4 @@
-import { Link, OrgNode } from "uniorg";
+import { Keyword, Link, OrgData, OrgNode } from "uniorg";
 import {
   isFileImage,
   isFileNameContainUuid,
@@ -7,24 +7,21 @@ import {
 import { existsSync, renameSync } from "fs";
 import { join } from "path";
 
-// TODO: master rename this builder if need a real builder
+function shouldRenameFile(filePath: string, dirPath: string): boolean {
+  return (
+    isFileImage(filePath) &&
+    !isFileNameContainUuid(filePath) &&
+    existsSync(join(dirPath, filePath))
+  );
+}
+
 export const createLinkMiddleware =
   (dirPath: string) =>
   (orgData: Link): OrgNode => {
     const isNotLink = orgData.type !== "link";
     const isNotFile = orgData.linkType !== "file";
-    if (isNotLink || isNotFile) {
-      return;
-    }
 
-    if (
-      !isFileImage(orgData.path) ||
-      isFileNameContainUuid(orgData.path) ||
-      !existsSync(join(dirPath, orgData.path))
-    ) {
-      console.info("DIR PATH: ", join(dirPath, orgData.path));
-      console.info("FILE EXIST: ", existsSync(join(dirPath, orgData.path)));
-      console.info("ORG DATA: ", orgData);
+    if (isNotLink || isNotFile || !shouldRenameFile(orgData.path, dirPath)) {
       return orgData;
     }
 
@@ -39,4 +36,31 @@ export const createLinkMiddleware =
       }
     }
     return orgData;
+  };
+
+const previewImgKey = "preview_img";
+
+export const createPreviewImageMiddleware =
+  (dirPath: string) =>
+  (k: Keyword): OrgNode => {
+    if (k?.type !== "keyword" || k.key.toLocaleLowerCase() != previewImgKey) {
+      return k;
+    }
+
+    const filePath = k.value;
+
+    if (!shouldRenameFile(filePath, dirPath)) {
+      return k;
+    }
+
+    try {
+      const newFileName = uniquifyFileName(filePath);
+      renameSync(join(dirPath, filePath), join(dirPath, newFileName));
+      k.value = newFileName;
+    } catch (e) {
+      if (e.code !== "ENOENT") {
+        throw e;
+      }
+    }
+    return k;
   };
