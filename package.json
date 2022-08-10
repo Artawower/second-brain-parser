@@ -1,6 +1,6 @@
 {
   "name": "second-brain-parser",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "Convert org mode roam notes to structure and vice versa",
   "main": "dist/index.js",
   "type": "module",
