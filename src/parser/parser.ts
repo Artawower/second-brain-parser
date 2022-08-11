@@ -206,6 +206,9 @@ export const collectNote = (
       acc.meta.externalLinks = [...acc.meta.externalLinks, ...externalLinks];
       acc.meta.linkedArticles = [...acc.meta.linkedArticles, ...internalLinks];
       acc.meta.images = [...acc.meta.images, ...cn.images];
+      if (cn.previewImg) {
+        acc.meta.images.push(cn.previewImg);
+      }
       acc.id ??= cn.id;
 
       return acc;

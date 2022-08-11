@@ -408,4 +408,15 @@ Another one text
 
     expect(note.meta.previewImg).toBeUndefined();
   });
+
+  it("Should add preview image to images list", () => {
+    const [note, _] = collectNote(
+      parse(`
+  #+TITLE: Some note with previmew image
+  #+PREVIEW_IMG: ./test.jpeg
+  `)
+    );
+
+    expect(note.meta.images).toContain("./test.jpeg");
+  });
 });
