@@ -37,6 +37,8 @@ jobs:
       run: pnpm install --frozen-lockfile
     - name: build
       run: pnpm run build
+    - name: info
+      run: ls dist
     - name: Publish if version has been updated
       uses: pascalgn/npm-publish-action@1.3.9
       with:
