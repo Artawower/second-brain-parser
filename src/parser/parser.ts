@@ -74,7 +74,7 @@ const keywordHandlers: { [key: string]: (data: Keyword) => NoteNodeChunk } = {
     tags: content.value.split(FILETAGS_DEVIDER).filter((v: string) => v),
   }),
   description: (content: Keyword) => ({ description: content.value }),
-  preview_img: (content: Keyword) => ({ previewImg: content.value }),
+  preview_img: (content: Keyword) => ({ previewImg: basename(content.value) }),
 };
 
 const keywordHandler = (content: Keyword): [NoteNodeChunk, OrgNode] => {
@@ -207,7 +207,7 @@ export const collectNote = (
       acc.meta.linkedArticles = [...acc.meta.linkedArticles, ...internalLinks];
       acc.meta.images = [...acc.meta.images, ...cn.images];
       if (cn.previewImg) {
-        acc.meta.images.push(cn.previewImg);
+        acc.meta.images.push(basename(cn.previewImg));
       }
       acc.id ??= cn.id;
 

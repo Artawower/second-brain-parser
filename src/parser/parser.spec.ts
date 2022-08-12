@@ -393,7 +393,7 @@ Another one text
   `)
     );
 
-    expect(note.meta.previewImg).toEqual("./test.jpeg");
+    expect(note.meta.previewImg).toEqual("test.jpeg");
   });
 
   it("Should note collect preview img", () => {
@@ -417,6 +417,6 @@ Another one text
   `)
     );
 
-    expect(note.meta.images).toContain("./test.jpeg");
+    expect(note.meta.images).toContain("test.jpeg");
   });
 });
