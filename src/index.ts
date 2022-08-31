@@ -88,6 +88,7 @@ export {
   collectOrgNotesFromDir,
   createLinkMiddleware,
   createPreviewImageMiddleware,
+  collectNote,
 };
 
 // const note = collectNoteFromFile('./miscellaneous/test1.org');
@@ -133,3 +134,4 @@ const n = collectNoteFromFile(
 // - [ ]   checkbox 2`)
 //   )
 // );
+// console.log(JSON.stringify(n, null, 2));
